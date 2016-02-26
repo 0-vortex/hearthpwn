@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HearthPwn Deck Simulator Ranker
 // @namespace    http://userscripts.org/users/386397
-// @version      0.8.0
+// @version      0.8.2
 // @description  Easy pack opener
 // @author       TED Vortex
 // @grant        GM_getValue
@@ -64,7 +64,7 @@ var Simulator = {
                     })
                     .end();
 
-                Simulator.next(2500);
+                Simulator.save(2500);
             }
         } else {
             console.log('No maxscore, skipping.');
@@ -79,10 +79,12 @@ var Simulator = {
         window.location = $('a.pack-link', Simulator.content).prop('href');
     },
 
-    save: function() {
+    save: function(delay) {
         console.log('This is a high score deck, data should be saved locally');
 
-        window.location = '//www.hearthpwn.com/packs/simulator/1-hearthpwn-wild-pack';
+        window.setTimeout(function() {
+            window.location = '//www.hearthpwn.com/packs/simulator/1-hearthpwn-wild-pack';
+        }, delay);
     },
 
     next: function(delay) {
