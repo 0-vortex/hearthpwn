@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HearthPwn Deck Simulator
 // @namespace    http://userscripts.org/users/386397
-// @version      1.1.4
+// @version      1.1.5
 // @description  Easy pack opener
 // @author       TED Vortex
 // @grant        GM_getValue
@@ -53,7 +53,9 @@ var Simulator = {
 
             GM_setValue('highscore', Simulator.highScore);
 
-            if (Simulator.highScore[type] > 50000) {
+            Hearth.showPackScore();
+
+            if (Simulator.highScore[type] >= 50000) {
                 $('div#form-field-title input', Simulator.content).val('vortex ' + Simulator.highScore[type]);
                 $('form.pack-save-form', Simulator.content).submit();
             } else {
@@ -75,6 +77,12 @@ var Simulator = {
             }
         } else {
             // no high score, skipping
+            Simulator.content.find('.pack-score em')
+                .text(score)
+                .end()
+                .find('.pack-score')
+                .addClass('score-total')
+                .end();
 
             Simulator.start();
         }
