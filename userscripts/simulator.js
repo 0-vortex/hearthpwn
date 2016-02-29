@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HearthPwn Deck Simulator Ranker
 // @namespace    http://userscripts.org/users/386397
-// @version      0.8.2
+// @version      0.9.0
 // @description  Easy pack opener
 // @author       TED Vortex
 // @grant        GM_getValue
@@ -16,12 +16,12 @@
 
 var Simulator = {
     counter: GM_getValue('counter', 0),
-    autoclick: GM_getValue('autoclick', true),
-    autoskip: GM_getValue('autoskip', true),
+    autoclick: GM_getValue('autoclick', false),
+    autoskip: GM_getValue('autoskip', false),
     autodelay: GM_getValue('autodelay', 1000),
     maxscore: GM_getValue('maxscore', 0),
     location: window.location.pathname.split('/'),
-    allowed: ['1-hearthpwn-wild-pack'],
+    allowed: ['1-hearthpwn-wild-pack', '2-hearthstone-tgt'],
     content: $('#content'),
     menuCss: {
         "width" : "240px",
@@ -45,7 +45,7 @@ var Simulator = {
             Simulator.maxscore = score;
 
             if (Simulator.maxscore > 100000) {
-                $('div#form-field-title input', Simulator.content).val('Vortex ' + Simulator.maxscore);
+                $('div#form-field-title input', Simulator.content).val('vortex ' + Simulator.maxscore);
                 $('form.pack-save-form', Simulator.content).submit();
             }
 
@@ -69,7 +69,7 @@ var Simulator = {
         } else {
             console.log('No maxscore, skipping.');
 
-            Simulator.next(0);
+            Simulator.next(Simulator.autodelay);
         }
     },
 
@@ -98,7 +98,7 @@ var Simulator = {
             console.clear();
             console.log('This script has been run ' + Simulator.counter + ' times.');
             console.log('Highest value opened pack was: ' + Simulator.maxscore);
-
+            console.log(Simulator.location);
             if (Simulator.location[2] != 'simulator' && Simulator.autoskip === true) {
                 Simulator.save();
             }
