@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HearthPwn Deck Simulator
 // @namespace    http://userscripts.org/users/386397
-// @version      1.1.8
+// @version      1.1.9
 // @description  Easy pack opener
 // @author       TED Vortex
 // @grant        GM_getValue
@@ -10,15 +10,16 @@
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
 // @match        http://www.hearthpwn.com/packs/*
+// @match        http://www.hearthpwn.com/error*
 // ==/UserScript==
 /* jshint -W097 */
 'use strict';
 
 var Simulator = {
-    uriBase: '//www.hearthpwn.com',
+    uriBase: 'http://www.hearthpwn.com',
     counter: GM_getValue('counter', 0),
     autoScript: GM_getValue('autoscript', true),
-    autoDelay: GM_getValue('autodelay', 1000),
+    autoDelay: GM_getValue('autodelay', 1500),
     highScore: GM_getValue('highscore', {
         "wild": 0,
         "standard": 0
@@ -54,8 +55,6 @@ var Simulator = {
             Simulator.highScore[type] = score;
 
             GM_setValue('highscore', Simulator.highScore);
-
-            Hearth.showPackScore();
 
             if (Simulator.highScore[type] >= Simulator.highScoreThreshold) {
                 $('div#form-field-title input', Simulator.content).val('vortex ' + Simulator.highScore[type]);
@@ -105,7 +104,10 @@ var Simulator = {
     },
 
     init: function() {
-        if (typeof(Simulator.location[1]) !== 'undefined' && Simulator.location[1] == "packs") {
+        if (typeof(Simulator.location[1]) !== 'undefined' && Simulator.location[1] == "error") {
+            // we just hit a network error
+            Simulator.start();
+        } else if (typeof(Simulator.location[1]) !== 'undefined' && Simulator.location[1] == "packs") {
             // Detected packs uri
 
             if (typeof(Simulator.location[2]) !== 'undefined' && Simulator.location[2] == "simulator") {
