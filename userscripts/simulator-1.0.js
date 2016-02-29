@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HearthPwn Deck Simulator
 // @namespace    http://userscripts.org/users/386397
-// @version      1.1.5
+// @version      1.1.8
 // @description  Easy pack opener
 // @author       TED Vortex
 // @grant        GM_getValue
@@ -23,6 +23,7 @@ var Simulator = {
         "wild": 0,
         "standard": 0
     }),
+    highScoreThreshold: 50000,
     location: window.location.pathname.split('/'),
     allowed: ['1-hearthpwn-wild-pack', '2-hearthstone-tgt'],
     regexp: {
@@ -45,6 +46,7 @@ var Simulator = {
         var results = $('ul.pack-results', Simulator.content),
             score = $('span.pack-score', Simulator.content).data('score');
 
+        console.log('Total packs opened: ' + Simulator.counter);
         console.log('Ready to open ' + type + ' pack with score ' + score);
         console.log('Highest value opened ' + type + ' pack was: ' + Simulator.highScore[type]);
 
@@ -55,7 +57,7 @@ var Simulator = {
 
             Hearth.showPackScore();
 
-            if (Simulator.highScore[type] >= 50000) {
+            if (Simulator.highScore[type] >= Simulator.highScoreThreshold) {
                 $('div#form-field-title input', Simulator.content).val('vortex ' + Simulator.highScore[type]);
                 $('form.pack-save-form', Simulator.content).submit();
             } else {
